@@ -1,6 +1,6 @@
 # KHP-Protocol-HTB
 In this challenge, we have a server application called "khp_server" (Keys Holder Protocol Server) that manages authentication keys. The vulnerability lies in its key handling functions, which we can exploit to gain shell access.
-
+https://app.hackthebox.com/challenges/KHP%2520Protocol
 
 **Understanding the Target:**
 Opening the provided binary in Ghidra, we see:
