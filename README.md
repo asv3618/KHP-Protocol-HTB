@@ -1,6 +1,7 @@
 # KHP-Protocol-HTB
 In this challenge, we have a server application called "khp_server" (Keys Holder Protocol Server) that manages authentication keys. The vulnerability lies in its key handling functions, which we can exploit to gain shell access.
 
+
 **Understanding the Target:**
 Opening the provided binary in Ghidra, we see:
 1.	It listens on a specified port (default 8080)
@@ -10,11 +11,11 @@ Opening the provided binary in Ghidra, we see:
 ![image](https://github.com/user-attachments/assets/ba6b38d8-a06f-418a-8f72-0c2d2519b396)
 
 The server appears to implement a custom protocol for key management operations with commands like:
-•	REKE - Register a key
-•	DEKE - Delete a key
-•	RLDB - List all keys in the database
-•	AUTH - Authenticate using a key
-•	EXEC - Execute commands (when authenticated)
+1. REKE - Register a key
+2. DEKE - Delete a key
+3. RLDB - List all keys in the database
+4. AUTH - Authenticate using a key
+5. EXEC - Execute commands (when authenticated)
 
 **Vulnerability Discovery:**
 After analyzing the server code and conducting initial testing, I identified a heap-based buffer overflow vulnerability in the key registration functionality.
@@ -24,14 +25,14 @@ The issue occurs in the REKE command, which parses input in the format REKE user
 The exploitation strategy involves:
 1.	Creating several key entries to set up the heap layout
 ![image](https://github.com/user-attachments/assets/d34198c0-cdc4-43fe-9ac2-2ad1afbe589b)
-                               Figure 1:Connecting to the Server
+Figure 1: Connecting to the Server
 
 ![image](https://github.com/user-attachments/assets/6c4600d3-2a81-44f5-b65a-12e302abcf05)
-                                    Figure 2: View Heap
+Figure 2: View Heap
 
 2.	Deleting one entry to create a free chunk
 ![image](https://github.com/user-attachments/assets/33bdfeaa-475f-4788-9c55-78008c55b146)
-                                  Figure 3: Deleted Entry
+Figure 3: Deleted Entry
 
 4.	Crafting a special entry that overflows into adjacent memory
 5.	Authenticating with a manipulated key structure
